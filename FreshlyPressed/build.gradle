@@ -1,0 +1,109 @@
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.android.tools.build:gradle:7.2.1'
+    }
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-allopen'
+apply plugin: 'kotlin-kapt'
+
+allOpen {
+    // allows mocking for classes w/o directly opening them for release builds
+    annotation 'org.wordpress.android.testing.OpenClassAnnotation'
+}
+
+repositories {
+    jcenter()
+    google()
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.squareup.okhttp3:okhttp:4.9.1'
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    // LiveData and ViewModels //
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0'
+
+    // JETPACK COMPOSE //
+    // Integration with activities
+    implementation 'androidx.activity:activity-compose:1.5.0'
+    // Compose Material Design
+    implementation 'androidx.compose.material:material:1.1.1'
+    // Animations
+    implementation 'androidx.compose.animation:animation:1.1.1'
+    // Tooling support (Previews, etc.)
+    implementation 'androidx.compose.ui:ui-tooling:1.1.1'
+    // Integration with ViewModels
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0'
+    implementation "androidx.compose.runtime:runtime-livedata:1.1.1"
+    // UI Tests
+    androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.1.1'
+
+    // Shared preferences //
+    implementation 'androidx.preference:preference-ktx:1.2.0'
+    // D.I. //
+    implementation "io.insert-koin:koin-android:3.0.1"
+
+    // HTTP calls //
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'ru.gildor.coroutines:kotlin-coroutines-okhttp:1.0'
+    // JSON //
+    implementation 'com.google.code.gson:gson:2.8.9'
+
+    // Room //
+    implementation "androidx.room:room-runtime:2.4.2"
+    implementation "androidx.room:room-ktx:2.4.2"
+    kapt "androidx.room:room-compiler:2.4.2"
+
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.mockito:mockito-core:3.12.4'
+    testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0'
+    testImplementation 'org.assertj:assertj-core:3.11.1'
+}
+
+android {
+    compileSdkVersion 32
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 32
+
+        applicationId "dev.nanday.freshlypressed"
+        versionName "1.0.0"
+        versionCode 1
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
+    buildFeatures {
+        viewBinding = true
+        compose true
+    }
+
+    // Set both the Java and Kotlin compilers to target Java 8.
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.1.1'
+    }
+}
